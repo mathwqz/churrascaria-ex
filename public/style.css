@@ -1,0 +1,135 @@
+/* Estilos Globais - Tema Escuro */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #121212; /* fundo escuro */
+    color: #f5f5f5; /* texto claro */
+    margin: 20px;
+  }
+  
+  /* Cabeçalho e Títulos */
+  h1, h2 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  /* Estilo para os Produtos */
+  .product {
+    background-color: #1e1e1e; /* área do produto em tom mais claro que o fundo */
+    border: 1px solid #333;
+    padding: 15px;
+    margin: 15px 0;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+  }
+  
+  /* Caso queira incluir uma área para imagem dentro do produto */
+  .image-container {
+    width: 120px;
+    height: 80px;
+    background-color: #333;
+    border-radius: 5px;
+    overflow: hidden;
+    margin-right: 15px;
+    flex-shrink: 0;
+  }
+  
+  .image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  /* Conteúdo do Produto (Título, Preço e Botão) */
+  .product-content {
+    flex-grow: 1;
+  }
+  
+  .product-content strong {
+    color: #ff9800; /* destaque para o nome do produto */
+    font-size: 1.2em;
+    display: block;
+    margin-bottom: 5px;
+  }
+  
+  .product-content span.price {
+    color: #ff9800;
+    font-weight: bold;
+  }
+  
+  /* Botão "Adicionar" */
+  .product button {
+    background-color: #ff9800;
+    color: #121212;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .product button:hover {
+    background-color: #e68900;
+  }
+  
+  /* Carrinho de Compras */
+  .cart {
+    background-color: #1e1e1e;
+    border: 1px solid #444;
+    padding: 15px;
+    margin-top: 20px;
+    border-radius: 8px;
+  }
+  
+  .cart ul {
+    list-style: none;
+  }
+  
+  .cart li {
+    padding: 10px 0;
+    border-bottom: 1px solid #333;
+  }
+  
+  .cart li:last-child {
+    border-bottom: none;
+  }
+  
+  .cart p strong {
+    color: #ff9800;
+    font-size: 1.2em;
+  }
+  
+  /* Botão "Fazer Pedido" */
+  #fazerPedidoButton {
+    background-color: #388e3c;
+    color: #fff;
+    border: none;
+    padding: 15px;
+    margin-top: 20px;
+    width: 100%;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 1em;
+    transition: background-color 0.3s ease;
+  }
+  
+  #fazerPedidoButton:hover {
+    background-color: #2e7d32;
+  }
+  
+  /* Responsividade */
+  @media (max-width: 768px) {
+    .product {
+      flex-direction: column;
+      text-align: center;
+    }
+    .image-container {
+      margin: 0 auto 10px;
+    }
+  }  

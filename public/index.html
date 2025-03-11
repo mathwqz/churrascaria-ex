@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Churrascaria - Faça seu Pedido</title>
+  <!-- css externo -->
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* Estilo básico caso o style.css não carregue */
+    body { font-family: Arial, sans-serif; margin: 20px; background-color: #121212; color: #f5f5f5; }
+  </style>
+</head>
+<body>
+  <h1>Cardápio da Churrascaria</h1>
+  <!-- Lista de Produtos -->
+  <div id="productList"></div>
+
+  <h2>Carrinho</h2>
+  <div id="cart">
+    <p>Nenhum item no carrinho.</p>
+  </div>
+
+  <button id="fazerPedidoButton">Fazer Pedido</button>
+
+  <script>
+    // produtos disponíveis
+    const products = [
+      { id: 1, name: "Espetos", price: 15.00, image: "images/espetos.jpg" },
+      { id: 2, name: "Arroz", price: 10.00, image: "images/arroz.jpg" },
+      { id: 3, name: "Feijão Tropeiro", price: 8.00, image: "images/feijao.jpg" },
+      { id: 4, name: "Mandioca", price: 6.00, image: "images/mandioca.jpg" },
+      { id: 5, name: "Vinagrete", price: 5.00, image: "images/vinagrete.jpg" }
+    ];
+
+    // carrinho
+    const cart = [];
+
+    // exibir lista de produtos com imagens e botões de adicionar
+    const productListDiv = document.getElementById('productList');
+    products.forEach(product => {
+      const productDiv = document.createElement('div');
+      productDiv.className = 'product';
+      productDiv.innerHTML = `
+        <div class="image-container">
+          <img src="${product.image}" alt="${product.name}">
+        </div>
+        <div class="product-content">
+          <strong>${product.name}</strong>
+          <span class="price">R$ ${product.price.toFixed(2)}</span>
+          <button onclick="addToCart(${product.id})">Adicionar</button>
+        </div>
+      `;
+      productListDiv.appendChild(productDiv);
+    });
+
+    // adicionar produto ao carrinho
+    function addToCart(productId) {
+      const product = products.find(p => p.id === productId);
+      if(product) {
+        const existing = cart.find(item => item.id === productId);
+        if(existing) {
+          existing.quantity++;
+        } else {
+          cart.push({ ...product, quantity: 1 });
+        }
+        updateCartDisplay();
+      }
+    }
+
+    // atualizar a exibição do carrinho
+    function updateCartDisplay() {
+      const cartDiv = document.getElementById('cart');
+      cartDiv.innerHTML = "";
+      if(cart.length === 0) {
+        cartDiv.innerHTML = "<p>Nenhum item no carrinho.</p>";
+      } else {
+        let total = 0;
+        const ul = document.createElement('ul');
+        cart.forEach(item => {
+          const li = document.createElement('li');
+          li.textContent = `${item.name} - Quantidade: ${item.quantity} - Subtotal: R$ ${(item.price * item.quantity).toFixed(2)}`;
+          total += item.price * item.quantity;
+          ul.appendChild(li);
+        });
+        cartDiv.appendChild(ul);
+        const totalP = document.createElement('p');
+        totalP.innerHTML = `<strong>Total: R$ ${total.toFixed(2)}</strong>`;
+        cartDiv.appendChild(totalP);
+      }
+    }
+
+    // função para processar o pedido e redirecionar para o WhatsApp
+    document.getElementById("fazerPedidoButton").addEventListener("click", function() {
+      if(cart.length === 0) {
+        alert("Seu carrinho está vazio!");
+        return;
+      }
+      let pedido = "Pedido:\n";
+      let total = 0;
+      cart.forEach(item => {
+        pedido += `${item.name} - Quantidade: ${item.quantity}\n`;
+        total += item.price * item.quantity;
+      });
+      pedido += `Total: R$ ${total.toFixed(2)}`;
+
+      // Envia o pedido para o back-end
+      fetch('/api/salvarPedido', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ pedido: pedido, precoTotal: total })
+      })
+      .then(response => response.json())
+      .then(data => {
+        // Redireciona para o WhatsApp com o pedido pré-preenchido
+        const telefone = "556391112348"; // Número correto no formato internacional
+        const url = "https://wa.me/" + telefone + "?text=" + encodeURIComponent(pedido);
+        window.location.href = url;
+      })
+      .catch(error => console.error('Erro:', error));
+    });
+  </script>
+</body>
+</html>
